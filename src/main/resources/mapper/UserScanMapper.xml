@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.currierbrother.mapper.UserScanMapper">
+  <resultMap id="BaseResultMap" type="com.example.currierbrother.bean.UserScan">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="startlocation" jdbcType="VARCHAR" property="startlocation" />
+    <result column="ordernum" jdbcType="VARCHAR" property="ordernum" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="usertel" jdbcType="VARCHAR" property="usertel" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="endlocation" jdbcType="VARCHAR" property="endlocation" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, startlocation, ordernum, username, usertel, idcard, userid, endlocation, createtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from userscan
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from userscan
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.currierbrother.bean.UserScan">
+    insert into userscan (id, startlocation, ordernum, 
+      username, usertel, idcard, 
+      userid, endlocation, createtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{startlocation,jdbcType=VARCHAR}, #{ordernum,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{usertel,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=INTEGER}, #{endlocation,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.currierbrother.bean.UserScan">
+    insert into userscan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="startlocation != null">
+        startlocation,
+      </if>
+      <if test="ordernum != null">
+        ordernum,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="usertel != null">
+        usertel,
+      </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="endlocation != null">
+        endlocation,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="startlocation != null">
+        #{startlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="ordernum != null">
+        #{ordernum,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usertel != null">
+        #{usertel,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="endlocation != null">
+        #{endlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.currierbrother.bean.UserScan">
+    update userscan
+    <set>
+      <if test="startlocation != null">
+        startlocation = #{startlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="ordernum != null">
+        ordernum = #{ordernum,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usertel != null">
+        usertel = #{usertel,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="endlocation != null">
+        endlocation = #{endlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.currierbrother.bean.UserScan">
+    update userscan
+    set startlocation = #{startlocation,jdbcType=VARCHAR},
+      ordernum = #{ordernum,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      usertel = #{usertel,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER},
+      endlocation = #{endlocation,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

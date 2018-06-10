@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>订单</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 10px;
+        }
+        .row {
+            height: 90%;
+        }
+        .nav {
+            height: 10%;
+        }
+        #fullS {
+            height: 100%;
+        }
+        table, td  {
+            solid-color: #BFEFFF;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#" style="color: #30a5ff">快递小哥后台管理系统</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="#">APP下载</a></li>
+                <li><a href="#">订单查询</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        数据库管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">用户</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">快递员</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">总订单</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">站点订单</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">其他</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <form role="search">
+            <div class="form-group" style="margin-left: 8px">
+                <input type="text" class="form-control" placeholder="搜索订单">
+            </div>
+        </form>
+        <ul class="nav menu" style="margin-left: 8px">
+            <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 快递点</a></li>
+            <br>
+            <li><a href="widgets.html"><span class="glyphicon glyphicon-th"></span> 订单</a></li>
+            <br>
+            <li><a href="charts.html"><span class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
+            <br>
+            <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
+            <br>
+            <li><a href="forms.html"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
+            <br>
+            <li><a href="panels.html"><span class="glyphicon glyphicon-info-sign"></span> 后台接口管理</a></li>
+            <br>
+            <li role="presentation" class="divider"></li>
+        </ul>
+        <br>
+        <br>
+        <br>
+        <div class="attribution"></div>
+    </div>
+    <div class="col-md-10" id="fullS">
+        <div ng-app="myApp" ng-controller="order">
+            <table class="table">
+                <caption>订单列表</caption>
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>订单号</th>
+                    <th>用户名</th>
+                    <th>用户身份证号码</th>
+                    <th>用户联系方式</th>
+                    <th>用户编号</th>
+                    <th>出发地</th>
+                    <th>收货地</th>
+                    <th>日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="active" ng-repeat="x in name">
+                    <td>{{x.id}}</td>
+                    <td>{{x.ordernum}}</td>
+                    <td>{{x.username}}</td>
+                    <td>{{x.idcard}}</td>
+                    <td>{{x.usertel}}</td>
+                    <td>{{x.userid}}</td>
+                    <td>{{x.startlocation}}</td>
+                    <td>{{x.endlocation}}</td>
+                    <td>{{x.createtime}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('order', function ($scope, $http) {
+            $http.get("http://localhost:8080/userscan/list")
+                .success(function (response) {
+                    $scope.name= response;
+                });
+
+        });
+    </script>
+</div>
+</body>
+</html>
