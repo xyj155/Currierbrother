@@ -14,9 +14,26 @@ import java.util.List;
 public class UserScanServiceImpl implements UserScanService {
     @Autowired
     private UserScanMapper mapper;
+
     @Override
     public List<UserScan> getAllList() {
         List<UserScan> userScans = mapper.selectAllList();
         return userScans;
     }
+
+    @Override
+    public void deleteByKey(int key) {
+        mapper.deleteByPrimaryKey(key);
+    }
+
+    @Override
+    public int insertData(UserScan userScan) {
+        return mapper.insert(userScan);
+    }
+
+    @Override
+    public int updateOrder(UserScan userScan) {
+        return mapper.updateByPrimaryKeySelective(userScan);
+    }
+
 }

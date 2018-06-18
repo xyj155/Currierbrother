@@ -86,7 +86,7 @@
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
             <br>
-            <li><a href="http://localhost:8080/car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
+            <li><a style="background:#FFF5EE" href="http://localhost:8080/car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
             <br>
             <li><a href="panels.html"><span class="glyphicon glyphicon-info-sign"></span> 后台接口管理</a></li>
             <br>
@@ -98,33 +98,25 @@
         <div class="attribution"></div>
     </div>
     <div class="col-md-10" id="fullS">
-        <div ng-app="myApp" ng-controller="order">
+        <div ng-app="myApp" ng-controller="car">
             <button class="btn btn-primary add" ng-click="add()">添加</button>
             <table class="table table-bordered" align="center" style="text-align: center">
                 <caption>订单列表</caption>
                 <thead>
                 <tr>
                     <th>编号</th>
-                    <th>订单号</th>
-                    <th>用户名</th>
-                    <th>用户身份证号码</th>
-                    <th>用户联系方式</th>
-                    <th>出发地</th>
-                    <th>收货地</th>
-                    <th>日期</th>
+                    <th>车牌号</th>
+                    <th>车型</th>
+                    <th>驾驶员</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="active" ng-repeat="x in name">
                     <td>{{x.id}}</td>
-                    <td>{{x.ordernum}}</td>
-                    <td>{{x.username}}</td>
-                    <td>{{x.idcard}}</td>
-                    <td>{{x.usertel}}</td>
-                    <td>{{x.startlocation}}</td>
-                    <td>{{x.endlocation}}</td>
-                    <td>{{x.createtime}}</td>
+                    <td>{{x.carnum}}</td>
+                    <td>{{x.carmodel}}</td>
+                    <td>{{x.carbelong}}</td>
                     <td>
                         <button class="btn btn-warning" ng-click="update($index)">修改</button>
                         <button class="btn btn-danger" ng-click="del($index)">删除</button>
@@ -245,8 +237,8 @@
 
 <script>
     var app = angular.module('myApp', []);
-    app.controller('order', function ($scope, $http) {
-        $http.get("http://localhost:8080/userscan/list")
+    app.controller('car', function ($scope, $http) {
+        $http.get("http://localhost:8080/car/carlist")
             .success(function (response) {
                 $scope.name = response;
             });

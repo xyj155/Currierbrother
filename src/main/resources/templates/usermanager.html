@@ -78,10 +78,10 @@
             <li><a href="http://localhost:8080/map/index"><span class="glyphicon glyphicon-dashboard"></span> 快递点</a>
             </li>
             <br>
-            <li><a style="background:#FFF5EE" href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
+            <li><a href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
             </li>
             <br>
-            <li><a  href="http://localhost:8080/user/usermanager"><span
+            <li><a style="background:#FFF5EE" href="http://localhost:8080/user/usermanager"><span
                     class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
@@ -105,26 +105,30 @@
                 <thead>
                 <tr>
                     <th>编号</th>
-                    <th>订单号</th>
                     <th>用户名</th>
-                    <th>用户身份证号码</th>
-                    <th>用户联系方式</th>
-                    <th>出发地</th>
-                    <th>收货地</th>
-                    <th>日期</th>
+                    <th>密码</th>
+                    <th>性别</th>
+                    <th>地址</th>
+                    <th>快递员</th>
+                    <th>联系方式</th>
+                    <th>身份证号码</th>
+                    <th>登陆信息</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="active" ng-repeat="x in name">
                     <td>{{x.id}}</td>
-                    <td>{{x.ordernum}}</td>
                     <td>{{x.username}}</td>
-                    <td>{{x.idcard}}</td>
+                    <td>{{x.password}}</td>
+                    <td>{{x.sex}}</td>
+                    <td>{{x.location}}</td>
+                    <td id="identity">{{x.identity}}</td>
                     <td>{{x.usertel}}</td>
-                    <td>{{x.startlocation}}</td>
-                    <td>{{x.endlocation}}</td>
-                    <td>{{x.createtime}}</td>
+                    <td>{{x.idcard}}</td>
+                    <td>
+                        <button class="btn btn-success" ng-click="update($index)">查看</button>
+                    </td>
                     <td>
                         <button class="btn btn-warning" ng-click="update($index)">修改</button>
                         <button class="btn btn-danger" ng-click="del($index)">删除</button>
@@ -246,7 +250,7 @@
 <script>
     var app = angular.module('myApp', []);
     app.controller('order', function ($scope, $http) {
-        $http.get("http://localhost:8080/userscan/list")
+        $http.get("http://localhost:8080/user/getuserlist")
             .success(function (response) {
                 $scope.name = response;
             });
@@ -274,7 +278,6 @@
             $scope.prod.startlocation = $scope.name[$index].startlocation;
             $scope.prod.endlocation = $scope.name[$index].endlocation;
             $scope.prod.id = $scope.name[$index].id;
-
             idx = $index;
         };
         var idx = -1;
@@ -286,7 +289,7 @@
         $scope.save = function () {
             //将添加的值赋给数组
             $http.get("http://localhost:8080/userscan/insert?ordernum=" + $scope.ordernum
-                + "&username=" + $scope.username + "&idcard=" + $scope.idcard+"&usertel="+$scope.usertel
+                + "&username=" + $scope.username + "&idcard=" + $scope.idcard + "&usertel=" + $scope.usertel
                 + "&startlocation=" + $scope.startlocation + "&endlocation=" + $scope.endlocation)
                 .success(function (response) {
                     alert("修改成功！");
@@ -302,8 +305,8 @@
         // 确认
         $scope.ensure = function () {
             $http.get("http://localhost:8080/userscan/update?ordernum=" + $scope.prod.ordernum
-                + "&username=" + $scope.prod.username + "&idcard=" + $scope.prod.idcard+ "&usertel="+ $scope.prod.usertel
-                + "&startlocation=" + $scope.prod.startlocation + "&endlocation=" + $scope.prod.endlocation+"&id="+ $scope.prod.id)
+                + "&username=" + $scope.prod.username + "&idcard=" + $scope.prod.idcard + "&usertel=" + $scope.prod.usertel
+                + "&startlocation=" + $scope.prod.startlocation + "&endlocation=" + $scope.prod.endlocation + "&id=" + $scope.prod.id)
                 .success(function (response) {
                     alert("修改成功！");
                     location.reload();
@@ -316,6 +319,7 @@
     });
 
 </script>
+
 </div>
 </body>
 </html>

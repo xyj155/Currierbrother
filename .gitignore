@@ -23,3 +23,15 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+快递小哥后台管理系统程序
+基于Spring Boot开发，Spring+Mybatis。后台数据库是Mysql关系数据库
+前端是Html5+css+JavaScript开发，运用的前端Html框架有BootStrap和JQuery，JavaScript框架有AngualarJS
+这个项目是学校的新苗项目，也是个人练习Spring Boot后台框架的练习项目。代码简单，适合初学者浏览查看。
+
+知识点：
+Spring Boot注解
+MyBatis映射
+HTML语言
+JavaScript脚本语言，进行前后端数据交互和相关动画效果
+个人简书博客：https://www.jianshu.com/u/a09ef2f2fe67

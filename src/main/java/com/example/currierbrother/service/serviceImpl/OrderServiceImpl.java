@@ -19,4 +19,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = mapper.selectByPrimaryKey(i);
         return  order;
     }
+
+    @Override
+    public void deletKey(int i) {
+         mapper.deleteByPrimaryKey(i);
+    }
 }

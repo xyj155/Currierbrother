@@ -15,15 +15,19 @@
         html, body {
             height: 100%;
         }
+
         .row {
             height: 90%;
         }
+
         .nav {
             height: 10%;
         }
+
         #fullS {
             height: 100%;
         }
+
         #map {
             height: 100%;
         }
@@ -72,15 +76,18 @@
             </div>
         </form>
         <ul class="nav menu" style="margin-left: 8px">
-            <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 快递点</a></li>
+            <li><a style="background:#FFF5EE"href="http://localhost:8080/map/index"><span class="glyphicon glyphicon-dashboard"></span> 快递点</a>
+            </li>
             <br>
-            <li><a href="widgets.html"><span class="glyphicon glyphicon-th"></span> 订单</a></li>
+            <li><a  href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
+            </li>
             <br>
-            <li><a href="charts.html"><span class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
+            <li><a  href="http://localhost:8080/userscan/usermanager"><span
+                    class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
             <br>
-            <li><a href="forms.html"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
+            <li><a href="http://localhost:8080/car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
             <br>
             <li><a href="panels.html"><span class="glyphicon glyphicon-info-sign"></span> 后台接口管理</a></li>
             <br>
@@ -93,37 +100,57 @@
     </div>
     <div class="col-md-10" id="fullS">
         <div id="map">
+        </div>
     </div>
 </div>
-<script>
-    var map = new AMap.Map('map', {
-        resizeEnable: true,
-        center: [116.397428, 39.90923],
-        zoom: 13
-    });
-    map.clearMap();
-    var markers = [{
-        position: [116.205467, 39.907761]
-    }, {
-        position: [116.368904, 39.913423]
-    }, {
-        position: [116.305467, 39.807761]
-    }];
-    markers.forEach(function (marker) {
-        new AMap.Marker({
-            map: map,
-            size: new AMap.Size(30, 30),
-            icon: "http://182.254.147.87/ic_location.png",
-            position: [marker.position[0], marker.position[1]],
-            offset: new AMap.Pixel(-12, -36)
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8080/userscan/list',
+            cache: false,
+            dataType: 'json',
+            error: function () {
+                alert("请求失败")
+            },
+            success: function (data) {
+                var map = new AMap.Map('map', {
+                    resizeEnable: true,
+                    zoom: 13
+                });
+                map.clearMap();
+                map.plugin(["AMap.CitySearch"], function() {
+                    var citysearch = new AMap.CitySearch();
+                    citysearch.getLocalCity();
+                    AMap.event.addListener(citysearch, "complete", function(result) {
+                        var citybounds;
+                        if (result && result.city && result.bounds) {
+                            citybounds = result.bounds;
+                            map.setBounds(citybounds);
+                        }
+                    });
+                });
+                // alert(data)
+                $.each(data,function(index,obj){
+                    new AMap.Marker({
+                        map: map,
+                        size: new AMap.Size(30, 30),
+                        icon: "http://182.254.147.87/ic_location.png",
+                        position: [obj['longitude'], obj['latitude']],
+                        offset: new AMap.Pixel(-12, -36)
+                    });
+                });
+            }
         });
     });
-    var center = map.getCenter();
-    var centerText = '当前中心点坐标：' + center.getLng() + ',' + center.getLat();
-    // document.getElementById('centerCoord').innerHTML = centerText;
-    // document.getElementById('tips').innerHTML = '成功添加三个点标记，其中有两个在当前地图视野外！';
+
+</script>
+<script>
+
+
 
 
 </script>
+
 </body>
 </html>

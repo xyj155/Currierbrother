@@ -6,4 +6,6 @@ import com.example.currierbrother.bean.Order;
 
 public interface OrderService {
    Order getOrderList(int i);
+
+   void deletKey(int i);
 }

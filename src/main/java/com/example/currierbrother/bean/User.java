@@ -9,17 +9,17 @@ public class User {
 
     private String sex;
 
-    private String userHead;
+    private String userhead;
 
     private String location;
 
-    private Integer identity;
+    private String identity;
 
-    private String userTel;
+    private String usertel;
 
     private String idcard;
 
-    private Integer orderId;
+
 
     public Integer getId() {
         return id;
@@ -53,13 +53,7 @@ public class User {
         this.sex = sex == null ? null : sex.trim();
     }
 
-    public String getUserHead() {
-        return userHead;
-    }
 
-    public void setUserHead(String userHead) {
-        this.userHead = userHead == null ? null : userHead.trim();
-    }
 
     public String getLocation() {
         return location;
@@ -69,21 +63,15 @@ public class User {
         this.location = location == null ? null : location.trim();
     }
 
-    public Integer getIdentity() {
+    public String getIdentity() {
         return identity;
     }
 
-    public void setIdentity(Integer identity) {
+    public void setIdentity(String identity) {
         this.identity = identity;
     }
 
-    public String getUserTel() {
-        return userTel;
-    }
 
-    public void setUserTel(String userTel) {
-        this.userTel = userTel == null ? null : userTel.trim();
-    }
 
     public String getIdcard() {
         return idcard;
@@ -93,11 +81,19 @@ public class User {
         this.idcard = idcard == null ? null : idcard.trim();
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public String getUserhead() {
+        return userhead;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setUserhead(String userhead) {
+        this.userhead = userhead;
+    }
+
+    public String getUsertel() {
+        return usertel;
+    }
+
+    public void setUsertel(String usertel) {
+        this.usertel = usertel;
     }
 }

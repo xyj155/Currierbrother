@@ -15,8 +15,25 @@ public class UserScan {
 
     private String idcard;
 
-    private Integer userid;
+    private double longitude;
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    private double latitude;
     private String endlocation;
 
     private Date createtime;
@@ -69,13 +86,6 @@ public class UserScan {
         this.idcard = idcard == null ? null : idcard.trim();
     }
 
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
 
     public String getEndlocation() {
         return endlocation;
