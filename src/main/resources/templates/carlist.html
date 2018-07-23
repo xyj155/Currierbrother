@@ -81,7 +81,7 @@
             <li><a style="background:#FFF5EE" href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
             </li>
             <br>
-            <li><a  href="http://localhost:8080/user/usermanager"><span
+            <li><a  href="${pageContext.request.contextPath}/user/usermanager"><span
                     class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
@@ -107,17 +107,19 @@
                     <th>编号</th>
                     <th>车牌号</th>
                     <th>车型</th>
+                    <th>车辆照片</th>
                     <th>驾驶员</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="active" ng-repeat="x in name">
-                    <td>{{x.id}}</td>
-                    <td>{{x.carnum}}</td>
-                    <td>{{x.carmodel}}</td>
-                    <td>{{x.carbelong}}</td>
-                    <td>
+                    <td align="center">{{x.id}}</td>
+                    <td align="center">{{x.carnum}}</td>
+                    <td align="center">{{x.carmodel}}</td>
+                    <td align="center"><img height="30px" width="70px" ng-src="{{x.carimg}}"></td>
+                    <td align="center">{{x.carbelong}}</td>
+                    <td align="center">
                         <button class="btn btn-warning" ng-click="update($index)">修改</button>
                         <button class="btn btn-danger" ng-click="del($index)">删除</button>
                     </td>

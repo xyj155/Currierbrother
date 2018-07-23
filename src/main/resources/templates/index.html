@@ -10,8 +10,67 @@
     <script type="text/javascript"
             src="http://webapi.amap.com/maps?v=1.4.6&key=4e0f85e120108994af79bfebb175b85b"></script>
     <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
-
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
     <style>
+        .info {
+            border: solid 1px silver;
+        }
+
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+
+        div.info-middle {
+            font-size: 12px;
+            padding: 6px;
+            line-height: 20px;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+
         html, body {
             height: 100%;
         }
@@ -76,18 +135,20 @@
             </div>
         </form>
         <ul class="nav menu" style="margin-left: 8px">
-            <li><a style="background:#FFF5EE"href="http://localhost:8080/map/index"><span class="glyphicon glyphicon-dashboard"></span> 快递点</a>
+            <li><a style="background:#FFF5EE" href="http://localhost:8080/map/index"><span
+                    class="glyphicon glyphicon-dashboard"></span> 快递点</a>
             </li>
             <br>
-            <li><a  href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
+            <li><a href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
             </li>
             <br>
-            <li><a  href="http://localhost:8080/userscan/usermanager"><span
+            <li><a href="http://localhost:8080/userscan/usermanager"><span
                     class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
             <br>
-            <li><a href="http://localhost:8080/car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
+            <li><a href="http://localhost:8080/car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a>
+            </li>
             <br>
             <li><a href="panels.html"><span class="glyphicon glyphicon-info-sign"></span> 后台接口管理</a></li>
             <br>
@@ -103,8 +164,50 @@
         </div>
     </div>
 </div>
+
+
 <script type="text/javascript">
+    var map;
     $(document).ready(function () {
+        /***
+         * 地图标记点请求
+         */
+        map = new AMap.Map('map', {
+            resizeEnable: true,
+            zoom: 13
+        });
+        /***
+         * 快递点标记
+         */
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8080/expressstation/all',
+            cache: false,
+            dataType: 'json',
+            error: function () {
+                alert("请求失败")
+            },
+            success: function (data) {
+                $.each(data, function (index, item) {
+                    var marker = new AMap.Marker({
+                        map: map,
+                        size: new AMap.Size(30, 30),
+                        icon: "../img/ic_express.png",
+                        position: [item['longtitude'], item['latitude']],
+                        offset: new AMap.Pixel(-12, -36)
+                    });
+                    marker.on('click', function () {
+                        var infoWindow = new AMap.InfoWindow({
+                            isCustom: true,  //使用自定义窗体
+                            content: createInfoWindow(data, index),
+                            offset: new AMap.Pixel(16, -45)
+                        });
+                        infoWindow.open(map, marker.getPosition());
+                    });
+
+                });
+            }
+        });
         $.ajax({
             type: 'get',
             url: 'http://localhost:8080/userscan/list',
@@ -114,41 +217,70 @@
                 alert("请求失败")
             },
             success: function (data) {
-                var map = new AMap.Map('map', {
-                    resizeEnable: true,
-                    zoom: 13
-                });
+                console.log(data);
                 map.clearMap();
-                map.plugin(["AMap.CitySearch"], function() {
-                    var citysearch = new AMap.CitySearch();
-                    citysearch.getLocalCity();
-                    AMap.event.addListener(citysearch, "complete", function(result) {
-                        var citybounds;
-                        if (result && result.city && result.bounds) {
-                            citybounds = result.bounds;
-                            map.setBounds(citybounds);
-                        }
-                    });
-                });
-                // alert(data)
-                $.each(data,function(index,obj){
+                $.each(data, function (index, obj) {
                     new AMap.Marker({
                         map: map,
                         size: new AMap.Size(30, 30),
-                        icon: "http://182.254.147.87/ic_location.png",
+                        icon: "../img/ic_location.png",
                         position: [obj['longitude'], obj['latitude']],
                         offset: new AMap.Pixel(-12, -36)
                     });
                 });
             }
         });
+
     });
 
-</script>
-<script>
 
+    //构建自定义信息窗体
+    function createInfoWindow(data, index) {
+        var content = [];
+        var title = data[index].name;
+        console.log();
+        var link = data[index].img;
+        // $("#pic").attr("src",link);
 
+        // $("#pic").html(link);
+        content.push("<br>" + "<img width='270px' height='90px' src="+link+" ><br>"+"详细地址：" + data[index].detail+"<br>");
+        content.push("<br>电话号码：" + data[index].tel);
+        content.push("<br>" + "<a href='https://ditu.amap.com/detail/B000A8URXB?citycode=110105'>详细信息</a>");
+        var info = document.createElement("div");
+        info.className = "info";
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "https://webapi.amap.com/images/close2.gif";
+        closeX.onclick = function (ev) {
+            map.clearInfoWindow();
+        };
 
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "https://webapi.amap.com/images/sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
 
 </script>
 

@@ -5,6 +5,15 @@ public class Car {
     private String carnum;
     private String carmodel;
     private String carbelong;
+private String carimg;
+
+    public String getCarimg() {
+        return carimg;
+    }
+
+    public void setCarimg(String carimg) {
+        this.carimg = carimg;
+    }
 
     public int getId() {
         return id;
