@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>订单</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        td, th {
+            text-decoration: none;
+            text-align: center
+        }
+
+        .row {
+            height: 90%;
+        }
+
+        .nav {
+            height: 10%;
+        }
+
+        #fullS {
+            height: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#" style="color: #30a5ff">快递小哥后台管理系统</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="#">APP下载</a></li>
+                <li><a href="#">订单查询</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        数据库管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">用户</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">快递员</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">总订单</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">站点订单</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">其他</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <form role="search">
+            <div class="form-group" style="margin-left: 8px" href="../programme/index">
+                <input type="text" class="form-control" placeholder="搜索订单">
+            </div>
+        </form>
+        <ul class="nav menu" style="margin-left: 8px">
+            <li><a href="../map/index" style="background:#FFF5EE"><span
+                    class="glyphicon glyphicon-dashboard"></span> 配送方案</a>
+            </li>
+            <br>
+            <li><a href="../map/index"><span class="glyphicon glyphicon-map-marker"></span> 快递点</a>
+            </li>
+            <br>
+            <li><a href="../order/orderscan"><span
+                    class="glyphicon glyphicon-th"></span> 订单</a>
+            </li>
+            <br>
+            <li><a href="../user/usermanager"><span
+                    class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
+            <br>
+            <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
+            <br>
+            <li><a href="../car/carindex"><span
+                    class="glyphicon glyphicon-pencil"></span> 车辆管理</a></li>
+            <br>
+            <li><a href="panels.html"><span class="glyphicon glyphicon-info-sign"></span> 后台接口管理</a></li>
+            <br>
+            <li role="presentation" class="divider"></li>
+        </ul>
+        <br>
+        <br>
+        <br>
+        <div class="attribution"></div>
+    </div>
+    <div class="col-md-10" ng-app="order" ng-controller="order">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-bordered" align="center" style="text-align: center">
+                    <caption>订单列表</caption>
+                    <thead>
+                    <tr>
+                        <th class="active">Num</th>
+                        <th class="success">派送地点</th>
+                        <th class="info">订单编号</th>
+                        <th class="warning">收件人</th>
+                        <th class="danger">联系方式</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr style="background: #ffffff" ng-repeat="x in items">
+                        <td>{{x.id}}</td>
+                        <td>{{x.endlocation}}</td>
+                        <td>{{x.ordernum}}</td>
+                        <td>{{x.username}}</td>
+                        <td>{{x.usertel}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a ng-click="Previous()">
+                                <span>上一页</span>
+                            </a>
+                        </li>
+                        <li ng-repeat="page in pageList1" ng-class="{active: isActivePage(page)}">
+                            <a ng-click="selectPage(page)">{{page}}</a>
+                        </li>
+                        <li>
+                            <a ng-click="Next()">
+                                <span>下一页</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-bordered" align="center" style="text-align: center">
+                    <caption>订单列表</caption>
+                    <thead>
+                    <tr>
+                        <th class="warning">操作</th>
+                        <th class="active">Num</th>
+                        <th class="success">快递员名称</th>
+                        <th class="info">联系方式</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr style="background: #ffffff" ng-repeat="x in Citem">
+                        <td>
+                            <input type="checkbox" height="80px" width="80px" ng-click="selectOne(x.id)">
+                        </td>
+                        <td>{{x.id}}</td>
+                        <td>{{x.username}}</td>
+                        <td>{{x.tel}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a ng-click="PreviousCurrier()">
+                                <span>上一页</span>
+                            </a>
+                        </li>
+                        <li ng-repeat="pages in CpageList" ng-class="{active: isActivePageCurrier(pages)}">
+                            <a ng-click="selectPageCurrier(pages)">{{pages}}</a>
+                        </li>
+                        <li>
+                            <a ng-click="NextCurrier()">
+                                <span>下一页</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <center>
+            <button class="btn btn-success" style="width: 400px;height: 60px" onclick="subcribe()">开始计算</button>
+        </center>
+    </div>
+    <script type="text/javascript">
+        var checked = [];
+        var app = angular.module('order', []);
+        app.controller('order', function ($scope, $http) {
+            $http.get("../userscan/list")
+                .success(function (response) {
+                    $scope.pageSize = 10;
+                    $scope.pages = Math.ceil(response.length / $scope.pageSize); //分页数
+                    console.log(response.length)
+                    $scope.newPages = $scope.pages > 10 ? 10 : $scope.pages;
+                    $scope.pageList1 = [];
+                    $scope.selPage = 1;
+                    //设置表格数据源(分页)
+                    $scope.setData = function () {
+                        $scope.items = response.slice(($scope.pageSize * ($scope.selPage - 1)), ($scope.selPage * $scope.pageSize));
+                    }
+                    $scope.items = response.slice(0, $scope.pageSize);
+                    for (var i = 0; i < $scope.newPages; i++) {
+                        $scope.pageList1.push(i + 1);
+                    }
+                    $scope.selectPage = function (page) {
+                        //不能小于1大于最大
+                        if (page < 1 || page > $scope.pages) return;
+                        if (page > 2) {
+                            var newpageList = [];
+                            for (var i = (page - 3); i < ((page + 2) > $scope.pages ? $scope.pages : (page + 2)); i++) {
+                                newpageList.push(i + 1);
+                            }
+                            $scope.pageList1 = newpageList;
+                        }
+                        $scope.selPage = page;
+                        $scope.setData();
+                        $scope.isActivePage(page);
+                        console.log("选择的页：" + page);
+                    };
+                    //设置当前选中页样式
+                    $scope.isActivePage = function (page) {
+                        return $scope.selPage == page;
+                    };
+                    //上一页
+                    $scope.Previous = function () {
+                        $scope.selectPage($scope.selPage - 1);
+                    }
+                    //下一页
+                    $scope.Next = function () {
+                        $scope.selectPage($scope.selPage + 1);
+                    };
+                });
+            $http.get("../currier/list")
+                .then(function (response) {
+                    $scope.CpageSize = 10;
+                    $scope.Cpages = Math.ceil(response.data.length / $scope.CpageSize); //分页数
+                    console.log(response.data);
+                    $scope.CnewPages = $scope.Cpages > 10 ? 10 : $scope.Cpages;
+                    $scope.CpageList = [];
+                    $scope.CselPage = 1;
+                    //单选框
+
+                    $scope.selectOne = function (id) {
+                        checked.push(id);
+                        console.log(checked)
+                    };
+                    //设置表格数据源(分页)
+                    $scope.setCurrierData = function () {
+                        $scope.Citem = response.data.slice(($scope.CpageSize * ($scope.CselPage - 1)), ($scope.CselPage * $scope.CpageSize));
+                    }
+                    $scope.Citem = response.data.slice(0, $scope.CpageSize);
+                    for (var i = 0; i < $scope.CnewPages; i++) {
+                        $scope.CpageList.push(i + 1);
+                    }
+                    $scope.selectPageCurrier = function (page) {
+                        //不能小于1大于最大
+                        if (page < 1 || page > $scope.Cpages) return;
+                        if (page > 2) {
+                            var newpageList = [];
+                            for (var i = (page - 3); i < ((page + 2) > $scope.Cpages ? $scope.Cpages : (page + 2)); i++) {
+                                newpageList.push(i + 1);
+                            }
+                            $scope.CpageList = newpageList;
+                        }
+                        $scope.CselPage = page;
+                        $scope.setCurrierData();
+                        $scope.isActivePageCurrier(page);
+                        console.log("选择的页：" + page);
+                    };
+
+                    //设置当前选中页样式
+                    $scope.isActivePageCurrier = function (page) {
+                        return $scope.CselPage == page;
+                    };
+                    //上一页
+                    $scope.PreviousCurrier = function () {
+                        $scope.selectPageCurrier($scope.CselPage - 1);
+                    }
+                    //下一页
+                    $scope.NextCurrier = function () {
+                        $scope.selectPageCurrier($scope.CselPage + 1);
+                    };
+                });
+
+        });
+
+        function subcribe() {
+            $.ajax({
+                type : "POST",
+                url : "../SolutionController/insertResult",
+                data : {
+                    "org.id" : "${org.id}"
+                },//数据，这里使用的是Json格式进行传输
+                success : function(result) {//返回数据根据结果进行相应的处理
+                    if ( result.success ) {
+                        $("#tipMsg").text("删除数据成功");
+                        tree.deleteItem("${org.id}", true);
+                    } else {
+                        $("#tipMsg").text("删除数据失败");
+                    }
+                }
+            });
+        }
+    </script>
+</div>
+</body>
+
+</html>

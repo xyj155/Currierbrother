@@ -11,7 +11,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1/currierbrother"
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/currierbrother"
                         userId="root" password="root">
         </jdbcConnection>
         <javaTypeResolver>
@@ -31,21 +31,25 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-         <!--要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
-        <!--//地图-->
-        <table tableName="map" domainObjectName="MapPoint" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
-        <!--订单-->
-        <table tableName="order" domainObjectName="Order" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
-       <!--用户-->
-        <table tableName="user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
-      <!--&lt;!&ndash;扫描订单&ndash;&gt;-->
-        <table tableName="userscan" domainObjectName="UserScan" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
-        <!--&lt;!&ndash;快递站点&ndash;&gt;-->
-        <table tableName="express" domainObjectName="Express" enableCountByExample="false" enableUpdateByExample="false"
+        <!--&lt;!&ndash;要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名&ndash;&gt;-->
+        <!--&lt;!&ndash;//地图&ndash;&gt;-->
+        <!--<table tableName="map" domainObjectName="MapPoint" enableCountByExample="false" enableUpdateByExample="false"-->
+        <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+        <!--&lt;!&ndash;订单&ndash;&gt;-->
+        <!--<table tableName="order" domainObjectName="Order" enableCountByExample="false" enableUpdateByExample="false"-->
+        <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+        <!--&lt;!&ndash;用户&ndash;&gt;-->
+        <!--<table tableName="user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false"-->
+        <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+        <!--&lt;!&ndash;&lt;!&ndash;扫描订单&ndash;&gt;&ndash;&gt;-->
+        <!--<table tableName="userscan" domainObjectName="UserScan" enableCountByExample="false" enableUpdateByExample="false"-->
+        <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+        <!--&lt;!&ndash;&lt;!&ndash;快递站点&ndash;&gt;&ndash;&gt;-->
+        <!--<table tableName="express" domainObjectName="Express" enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+        <!--<table tableName="currier" domainObjectName="Currier" enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+        <table tableName="dailyorder" domainObjectName="Daily" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
     </context>
 </generatorConfiguration>

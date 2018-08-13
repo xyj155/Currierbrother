@@ -135,19 +135,22 @@
             </div>
         </form>
         <ul class="nav menu" style="margin-left: 8px">
-            <li><a style="background:#FFF5EE" href="http://localhost:8080/map/index"><span
-                    class="glyphicon glyphicon-dashboard"></span> 快递点</a>
+            <li><a href="../programme/index"><span
+                    class="glyphicon glyphicon-dashboard"></span> 配送方案</a>
+            </li> <br>
+            <li><a style="background:#FFF5EE" href="../map/index"><span
+                    class="glyphicon glyphicon-map-marker"></span> 快递点</a>
             </li>
             <br>
-            <li><a href="http://localhost:8080/order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
+            <li><a href="../order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
             </li>
             <br>
-            <li><a href="http://localhost:8080/userscan/usermanager"><span
+            <li><a href="../userscan/usermanager"><span
                     class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
             <br>
-            <li><a href="http://localhost:8080/car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a>
+            <li><a href="../car/carindex"><span class="glyphicon glyphicon-pencil"></span> 车辆管理</a>
             </li>
             <br>
             <li><a href="panels.html"><span class="glyphicon glyphicon-info-sign"></span> 后台接口管理</a></li>
@@ -179,38 +182,38 @@
         /***
          * 快递点标记
          */
+        // $.ajax({
+        //     type: 'get',
+        //     url: '../expressstation/all',
+        //     cache: false,
+        //     dataType: 'json',
+        //     error: function () {
+        //         alert("请求失败")
+        //     },
+        //     success: function (data) {
+        //         $.each(data, function (index, item) {
+        //             var marker = new AMap.Marker({
+        //                 map: map,
+        //                 size: new AMap.Size(30, 30),
+        //                 icon: "../img/ic_express.png",
+        //                 position: [item['longtitude'], item['latitude']],
+        //                 offset: new AMap.Pixel(-12, -36)
+        //             });
+        //             marker.on('click', function () {
+        //                 var infoWindow = new AMap.InfoWindow({
+        //                     isCustom: true,  //使用自定义窗体
+        //                     content: createInfoWindow(data, index),
+        //                     offset: new AMap.Pixel(16, -45)
+        //                 });
+        //                 infoWindow.open(map, marker.getPosition());
+        //             });
+        //
+        //         });
+        //     }
+        // });
         $.ajax({
             type: 'get',
-            url: 'http://localhost:8080/expressstation/all',
-            cache: false,
-            dataType: 'json',
-            error: function () {
-                alert("请求失败")
-            },
-            success: function (data) {
-                $.each(data, function (index, item) {
-                    var marker = new AMap.Marker({
-                        map: map,
-                        size: new AMap.Size(30, 30),
-                        icon: "../img/ic_express.png",
-                        position: [item['longtitude'], item['latitude']],
-                        offset: new AMap.Pixel(-12, -36)
-                    });
-                    marker.on('click', function () {
-                        var infoWindow = new AMap.InfoWindow({
-                            isCustom: true,  //使用自定义窗体
-                            content: createInfoWindow(data, index),
-                            offset: new AMap.Pixel(16, -45)
-                        });
-                        infoWindow.open(map, marker.getPosition());
-                    });
-
-                });
-            }
-        });
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:8080/userscan/list',
+            url: '../userscan/list',
             cache: false,
             dataType: 'json',
             error: function () {
@@ -220,12 +223,21 @@
                 console.log(data);
                 map.clearMap();
                 $.each(data, function (index, obj) {
-                    new AMap.Marker({
+                    console.log(obj['longitude'], obj['latitude']);
+                   var marker= new AMap.Marker({
                         map: map,
                         size: new AMap.Size(30, 30),
                         icon: "../img/ic_location.png",
                         position: [obj['longitude'], obj['latitude']],
                         offset: new AMap.Pixel(-12, -36)
+                    });
+                    marker.on('click', function () {
+                        var infoWindow = new AMap.InfoWindow({
+                            isCustom: true,  //使用自定义窗体
+                            content: createInfoWindow(data, index),
+                            offset: new AMap.Pixel(16, -45)
+                        });
+                        infoWindow.open(map, marker.getPosition());
                     });
                 });
             }
@@ -237,22 +249,16 @@
     //构建自定义信息窗体
     function createInfoWindow(data, index) {
         var content = [];
-        var title = data[index].name;
-        console.log();
-        var link = data[index].img;
-        // $("#pic").attr("src",link);
-
-        // $("#pic").html(link);
-        content.push("<br>" + "<img width='270px' height='90px' src="+link+" ><br>"+"详细地址：" + data[index].detail+"<br>");
-        content.push("<br>电话号码：" + data[index].tel);
-        content.push("<br>" + "<a href='https://ditu.amap.com/detail/B000A8URXB?citycode=110105'>详细信息</a>");
+        content.push("<br>详细地址：" + data[index].endlocation);
+        content.push("<br>订单号码：" + data[index].ordernum);
+        content.push("<br>用户名：" + data[index].username);
         var info = document.createElement("div");
         info.className = "info";
         var top = document.createElement("div");
         var titleD = document.createElement("div");
         var closeX = document.createElement("img");
         top.className = "info-top";
-        titleD.innerHTML = title;
+        titleD.innerHTML = "收件人详细信息";
         closeX.src = "https://webapi.amap.com/images/close2.gif";
         closeX.onclick = function (ev) {
             map.clearInfoWindow();

@@ -17,6 +17,7 @@ public interface MapPointMapper {
     int updateByPrimaryKeySelective(MapPoint record);
 
     int updateByPrimaryKey(MapPoint record);
-    @Select("select * from map")
+
+    @Select("select * from userscan")
     List<MapPoint> selectMappoints();
 }
