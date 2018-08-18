@@ -42,7 +42,7 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="#">APP下载</a></li>
+                <li><a onclick="scanDown()">APP下载</a></li>
                 <li><a href="#">订单查询</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -77,14 +77,15 @@
         <ul class="nav menu" style="margin-left: 8px">
             <li><a href="../programme/index"><span
                     class="glyphicon glyphicon-dashboard"></span> 配送方案</a>
-            </li> <br>
+            </li>
+            <br>
             <li><a href="../map/index"><span class="glyphicon glyphicon-map-marker"></span> 快递点</a>
             </li>
             <br>
             <li><a style="background:#FFF5EE" href="../order/orderscan"><span class="glyphicon glyphicon-th"></span> 订单</a>
             </li>
             <br>
-            <li><a  href="../user/usermanager"><span
+            <li><a href="../user/usermanager"><span
                     class="glyphicon glyphicon-stats"></span> 用户管理</a></li>
             <br>
             <li><a href="tables.html"><span class="glyphicon glyphicon-list-alt"></span> 统计</a></li>
@@ -101,7 +102,7 @@
         <div class="attribution"></div>
     </div>
     <div class="col-md-10" id="fullS">
-        <div ng-app="myApp" ng-controller="order">
+        <div ng-app="myApp" ng-controller="order" style="height: 500px">
             <button class="btn btn-primary add" ng-click="add()">添加</button>
             <table class="table table-bordered" align="center" style="text-align: center">
                 <caption>订单列表</caption>
@@ -119,7 +120,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="active" ng-repeat="x in name">
+                <tr class="active" ng-repeat="x in items">
                     <td>{{x.id}}</td>
                     <td>{{x.ordernum}}</td>
                     <td>{{x.username}}</td>
@@ -135,7 +136,23 @@
                 </tr>
                 </tbody>
             </table>
-
+            <nav>
+                <ul class="pagination">
+                    <li>
+                        <a ng-click="Previous()">
+                            <span>上一页</span>
+                        </a>
+                    </li>
+                    <li ng-repeat="page in pageList1" ng-class="{active: isActivePage(page)}">
+                        <a ng-click="selectPage(page)">{{page}}</a>
+                    </li>
+                    <li>
+                        <a ng-click="Next()">
+                            <span>下一页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
             <!-- 添加信息 -->
             <div class="modal" id="modal-1">
                 <div class="modal-dialog">
@@ -245,13 +262,82 @@
     </div>
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style=" text-align: center;">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    快递小哥APP下载
+                </h4>
+            </div>
+            <div >
+                <img class="modal-body" th:src="@{/img/ic_scan.png}" height="300px" width="300px"/>
+            </div>
 
-<script>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">确定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+    function scanDown() {
+        $('#myModal').modal('show');
+    }
+
     var app = angular.module('myApp', []);
     app.controller('order', function ($scope, $http) {
         $http.get("../userscan/list")
             .success(function (response) {
-                $scope.name = response;
+                $scope.pageSize = 10;
+                $scope.pages = Math.ceil(response.length / $scope.pageSize); //分页数
+                console.log(response.length)
+                $scope.newPages = $scope.pages > 10 ? 10 : $scope.pages;
+                $scope.pageList1 = [];
+                $scope.selPage = 1;
+                //设置表格数据源(分页)
+                $scope.setData = function () {
+                    $scope.items = response.slice(($scope.pageSize * ($scope.selPage - 1)), ($scope.selPage * $scope.pageSize));
+                }
+                $scope.items = response.slice(0, $scope.pageSize);
+                for (var i = 0; i < $scope.newPages; i++) {
+                    $scope.pageList1.push(i + 1);
+                }
+                $scope.selectPage = function (page) {
+                    //不能小于1大于最大
+                    if (page < 1 || page > $scope.pages) return;
+                    if (page > 2) {
+                        var newpageList = [];
+                        for (var i = (page - 3); i < ((page + 2) > $scope.pages ? $scope.pages : (page + 2)); i++) {
+                            newpageList.push(i + 1);
+                        }
+                        $scope.pageList1 = newpageList;
+                    }
+                    $scope.selPage = page;
+                    $scope.setData();
+                    $scope.isActivePage(page);
+                    console.log("选择的页：" + page);
+                };
+                //设置当前选中页样式
+                $scope.isActivePage = function (page) {
+                    return $scope.selPage == page;
+                };
+                //上一页
+                $scope.Previous = function () {
+                    $scope.selectPage($scope.selPage - 1);
+                }
+                //下一页
+                $scope.Next = function () {
+                    $scope.selectPage($scope.selPage + 1);
+                };
+                // $scope.name = response;
             });
         $scope.prod = {};
         //删除
@@ -289,7 +375,7 @@
         $scope.save = function () {
             //将添加的值赋给数组
             $http.get("../userscan/insert?ordernum=" + $scope.ordernum
-                + "&username=" + $scope.username + "&idcard=" + $scope.idcard+"&usertel="+$scope.usertel
+                + "&username=" + $scope.username + "&idcard=" + $scope.idcard + "&usertel=" + $scope.usertel
                 + "&startlocation=" + $scope.startlocation + "&endlocation=" + $scope.endlocation)
                 .success(function (response) {
                     alert("修改成功！");
@@ -305,8 +391,8 @@
         // 确认
         $scope.ensure = function () {
             $http.get("../userscan/update?ordernum=" + $scope.prod.ordernum
-                + "&username=" + $scope.prod.username + "&idcard=" + $scope.prod.idcard+ "&usertel="+ $scope.prod.usertel
-                + "&startlocation=" + $scope.prod.startlocation + "&endlocation=" + $scope.prod.endlocation+"&id="+ $scope.prod.id)
+                + "&username=" + $scope.prod.username + "&idcard=" + $scope.prod.idcard + "&usertel=" + $scope.prod.usertel
+                + "&startlocation=" + $scope.prod.startlocation + "&endlocation=" + $scope.prod.endlocation + "&id=" + $scope.prod.id)
                 .success(function (response) {
                     alert("修改成功！");
                     location.reload();

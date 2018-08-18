@@ -42,7 +42,7 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="#">APP下载</a></li>
+                <li><a onclick="scanDown()">APP下载</a></li>
                 <li><a href="#">订单查询</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -103,9 +103,9 @@
         <br>
         <div class="attribution"></div>
     </div>
-    <div class="col-md-10" ng-app="order" ng-controller="order">
+    <div class="col-md-10" ng-app="order" ng-controller="order" style="height: 500px">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6"  style="height: 600px">
                 <table class="table table-bordered" align="center" style="text-align: center">
                     <caption>订单列表</caption>
                     <thead>
@@ -144,10 +144,10 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
-            <div class="col-md-6">
+            </div >
+            <div class="col-md-6" style="height: 600px">
                 <table class="table table-bordered" align="center" style="text-align: center">
-                    <caption>订单列表</caption>
+                    <caption>配送员列表</caption>
                     <thead>
                     <tr>
                         <th class="warning">操作</th>
@@ -188,11 +188,38 @@
                 </nav>
             </div>
         </div>
-        <center>
-            <button class="btn btn-success" style="width: 400px;height: 60px" onclick="subcribe()">开始计算</button>
-        </center>
+
     </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style=" text-align: center;">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        快递小哥APP下载
+                    </h4>
+                </div>
+                <div >
+                    <img class="modal-body" th:src="@{/img/ic_scan.png}" height="300px" width="300px"/>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">确定
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <script type="text/javascript">
+        function scanDown() {
+            $('#myModal').modal('show');
+        }
+
         var checked = [];
         var app = angular.module('order', []);
         app.controller('order', function ($scope, $http) {

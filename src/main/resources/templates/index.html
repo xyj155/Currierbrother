@@ -11,9 +11,23 @@
             src="http://webapi.amap.com/maps?v=1.4.6&key=4e0f85e120108994af79bfebb175b85b"></script>
     <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
     <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/AMap.WalkingRender1120.css"/>
+    <script type="text/javascript"
+            src="https://webapi.amap.com/maps?v=1.4.9&key=e77295c0a6d4d4ed3b91b307dd6cc623&plugin=AMap.Walking"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/WalkingRender1230.js"></script>
     <style>
         .info {
             border: solid 1px silver;
+        }
+
+        #panel {
+            z-index: 999;
+            position: absolute;
+            background-color: white;
+            max-height: 100%;
+            overflow-y: auto;
+            right: 0;
+            width: 280px;
         }
 
         div.info-top {
@@ -102,7 +116,7 @@
             </div>
             <div>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">APP下载</a></li>
+                    <li><a onclick="scanDown()">APP下载</a></li>
                     <li><a href="#">订单查询</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -127,6 +141,7 @@
     </nav>
 </div>
 
+
 <div class="row">
     <div class="col-md-2 sidebar">
         <form role="search">
@@ -137,7 +152,8 @@
         <ul class="nav menu" style="margin-left: 8px">
             <li><a href="../programme/index"><span
                     class="glyphicon glyphicon-dashboard"></span> 配送方案</a>
-            </li> <br>
+            </li>
+            <br>
             <li><a style="background:#FFF5EE" href="../map/index"><span
                     class="glyphicon glyphicon-map-marker"></span> 快递点</a>
             </li>
@@ -163,15 +179,45 @@
         <div class="attribution"></div>
     </div>
     <div class="col-md-10" id="fullS">
-        <div id="map">
-        </div>
+        <div id="map"></div>
     </div>
+    <div id="panel"></div>
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:500px;
+        height: 100px;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    快递小哥APP下载
+                </h4>
+            </div>
+            <img class="modal-body" th:src="@{/img/ic_scan.png}" height="300px" width="100%"/>
 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">确定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script type="text/javascript">
+    function scanDown() {
+        $('#myModal').modal('show');
+    }
+
     var map;
     $(document).ready(function () {
+
         /***
          * 地图标记点请求
          */
@@ -180,8 +226,18 @@
             zoom: 13
         });
         /***
-         * 快递点标记
-         */
+         //  * 快递点标记
+         //  */
+        // var walking = new AMap.Walking(); //构造路线导航类
+        // //根据起终点坐标规划步行路线，您如果想修改结果展现效果，请参考页面：https://lbs.amap.com/fn/css-style/
+        // walking.search(new AMap.LngLat(116.464996,39.971433), new AMap.LngLat(116.396034,39.923271), function(status, result){
+        //     if(status === 'complete'){
+        //         (new Lib.AMap.WalkingRender()).autoRender({
+        //             data: result,
+        //             map: map
+        //         });
+        //     }
+        // });
         // $.ajax({
         //     type: 'get',
         //     url: '../expressstation/all',
@@ -211,6 +267,7 @@
         //         });
         //     }
         // });
+
         $.ajax({
             type: 'get',
             url: '../userscan/list',
@@ -222,12 +279,33 @@
             success: function (data) {
                 console.log(data);
                 map.clearMap();
+                var walking = new AMap.Walking(); //构造路线导航类
+                 new AMap.Marker({
+                    map: map,
+                    size: new AMap.Size(20, 23),  //图标大小
+                    icon: "http://bmob-cdn-20920.b0.upaiyun.com/2018/08/16/95ae5ca840c0652c80d04d96c96e884c.png",
+                    position: [120.751644, 30.767137],
+                    offset: new AMap.Pixel(-12, -36)
+                });
                 $.each(data, function (index, obj) {
-                    console.log(obj['longitude'], obj['latitude']);
-                   var marker= new AMap.Marker({
+                    //根据起终点坐标规划步行路线，您如果想修改结果展现效果，请参考页面：https://lbs.amap.com/fn/css-style/
+                    walking.search(new AMap.LngLat(120.751644, 30.767137), new AMap.LngLat(obj['longitude'], obj['latitude']), function (status, result) {
+                        if (status === 'complete') {
+                            console.log(obj['longitude'], obj['latitude']);
+                            (new Lib.AMap.WalkingRender()).autoRender({
+                                data: result,
+                                map: map,
+                                isOutline: false,
+                                outlineColor: "white",
+                                hideMarkers: true
+                            });
+                        }
+                    });
+
+                    var marker = new AMap.Marker({
                         map: map,
-                        size: new AMap.Size(30, 30),
-                        icon: "../img/ic_location.png",
+                        size: new AMap.Size(20, 23),  //图标大小
+                        icon: "http://bmob-cdn-20920.b0.upaiyun.com/2018/08/16/1bb133834083ec3c80687162012d16f9.png",
                         position: [obj['longitude'], obj['latitude']],
                         offset: new AMap.Pixel(-12, -36)
                     });

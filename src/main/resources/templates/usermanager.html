@@ -120,7 +120,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="active" ng-repeat="x in name">
+                <tr class="active" ng-repeat="x in items">
                     <td>{{x.id}}</td>
                     <td>{{x.username}}</td>
                     <td>{{x.password}}</td>
@@ -139,7 +139,23 @@
                 </tr>
                 </tbody>
             </table>
-
+            <nav>
+                <ul class="pagination">
+                    <li>
+                        <a ng-click="Previous()">
+                            <span>上一页</span>
+                        </a>
+                    </li>
+                    <li ng-repeat="page in pageList1" ng-class="{active: isActivePage(page)}">
+                        <a ng-click="selectPage(page)">{{page}}</a>
+                    </li>
+                    <li>
+                        <a ng-click="Next()">
+                            <span>下一页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
             <!-- 添加信息 -->
             <div class="modal" id="modal-1">
                 <div class="modal-dialog">
@@ -255,7 +271,47 @@
     app.controller('order', function ($scope, $http) {
         $http.get("../user/getuserlist")
             .success(function (response) {
-                $scope.name = response;
+                $scope.pageSize = 10;
+                $scope.pages = Math.ceil(response.length / $scope.pageSize); //分页数
+                console.log(response.length)
+                $scope.newPages = $scope.pages > 10 ? 10 : $scope.pages;
+                $scope.pageList1 = [];
+                $scope.selPage = 1;
+                //设置表格数据源(分页)
+                $scope.setData = function () {
+                    $scope.items = response.slice(($scope.pageSize * ($scope.selPage - 1)), ($scope.selPage * $scope.pageSize));
+                }
+                $scope.items = response.slice(0, $scope.pageSize);
+                for (var i = 0; i < $scope.newPages; i++) {
+                    $scope.pageList1.push(i + 1);
+                }
+                $scope.selectPage = function (page) {
+                    //不能小于1大于最大
+                    if (page < 1 || page > $scope.pages) return;
+                    if (page > 2) {
+                        var newpageList = [];
+                        for (var i = (page - 3); i < ((page + 2) > $scope.pages ? $scope.pages : (page + 2)); i++) {
+                            newpageList.push(i + 1);
+                        }
+                        $scope.pageList1 = newpageList;
+                    }
+                    $scope.selPage = page;
+                    $scope.setData();
+                    $scope.isActivePage(page);
+                    console.log("选择的页：" + page);
+                };
+                //设置当前选中页样式
+                $scope.isActivePage = function (page) {
+                    return $scope.selPage == page;
+                };
+                //上一页
+                $scope.Previous = function () {
+                    $scope.selectPage($scope.selPage - 1);
+                }
+                //下一页
+                $scope.Next = function () {
+                    $scope.selectPage($scope.selPage + 1);
+                };
             });
         $scope.prod = {};
         //删除

@@ -34,7 +34,7 @@ public class UserScan {
     }
 
     private double latitude;
-    private String endlocation;
+    private String  endlocation;
 
     private Date createtime;
 
@@ -92,7 +92,7 @@ public class UserScan {
     }
 
     public void setEndlocation(String endlocation) {
-        this.endlocation = endlocation == null ? null : endlocation.trim();
+        this.endlocation = endlocation;
     }
 
     public Date getCreatetime() {

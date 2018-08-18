@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class DailyServiceImpl implements DailyService {
     @Autowired
@@ -15,5 +16,15 @@ public class DailyServiceImpl implements DailyService {
     @Override
     public List<Daily> getList() {
         return dailyMapper.getList();
+    }
+
+    @Override
+    public int insertDaily(Daily daily) {
+        return dailyMapper.insert(daily);
+    }
+
+    @Override
+    public void deletAll() {
+        dailyMapper.deletAll();
     }
 }

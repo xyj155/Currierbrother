@@ -29,21 +29,46 @@
     </div>
     <div class="copyright">嘉兴学院数学与信息学院 版权所有©2017-2019 技术支持电话：173-7413-1273</div>
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    登陆错误！错误信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                登陆失败，账号或密码错误！！
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">确定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
     var app = angular.module('myApp', []);
     app.controller('login', function ($scope, $http) {
         $scope.loginbyuser = function () {
-            $http.get("http://localhost:8080/user/login?username=" + document.getElementById("username").value + "&password=" + document.getElementById("password").value)
+            $http.get("../user/login?username=" + document.getElementById("username").value + "&password=" + document.getElementById("password").value)
                 .then(function successCallback(response) {
                     $scope.name = response.data;
-                    if ($scope.name.username === document.getElementById("username").value && $scope.name.password === document.getElementById("password").value) {
-                        window.location.href = "http://localhost:8080/map/index";
-                        alert("登陆成功")
+                    $scope.name = response.data;
+                    console.log(response.data)
+                    if (response.data === 1) {
+                        window.location.href = "../programme/index";
                     } else {
-                        alert("登陆失败，账号或密码不对")
+                        $('#myModal').modal('show');
                     }
                 }, function errorCallback(reason) {
-                    alert("错误" + reason)
+                    $('#myModal').modal('show');
                 });
         }
     });
