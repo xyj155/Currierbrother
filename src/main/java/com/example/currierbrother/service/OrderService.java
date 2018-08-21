@@ -9,7 +9,7 @@ import com.example.currierbrother.bean.Order;
 import java.util.List;
 
 public interface OrderService {
-   Order getOrderList(int i);
+   Order getOrderById(int i);
 
    void deletKey(int i);
 

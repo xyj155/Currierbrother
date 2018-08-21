@@ -13,4 +13,6 @@ public interface UserScanService {
     int insertData(UserScan userScan);
 
     int updateOrder( UserScan userScan);
+
+   UserScan selectByPrimaryKey(int i);
 }

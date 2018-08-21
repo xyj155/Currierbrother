@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderList(int i) {
+    public Order getOrderById(int i) {
         Order order = this.mapper.selectByPrimaryKey(i);
         return order;
     }
@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Daily getExpressByUid(int id) {
-        return dailyMapper.getExpressByUid(id);
+        return dailyMapper.getExpressById(id);
     }
 
     @Override

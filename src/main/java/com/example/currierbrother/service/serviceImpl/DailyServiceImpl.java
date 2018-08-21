@@ -27,4 +27,9 @@ public class DailyServiceImpl implements DailyService {
     public void deletAll() {
         dailyMapper.deletAll();
     }
+
+    @Override
+    public Daily getDailyOrderById(int id) {
+        return dailyMapper.selectByPrimaryKey(id);
+    }
 }

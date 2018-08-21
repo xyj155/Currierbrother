@@ -12,24 +12,25 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 public interface DailyMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Integer var1);
 
-    @Insert({"INSERT INTO dailyorder (ordernum,latintude,longtitude,username,startlocation,endlocaton,tel,uid,servicetime,endtime) VALUES (#{ordernum},#{latintude},#{longtitude},#{username},#{startlocation},#{endlocaton},#{tel},#{uid},#{servicetime},#{endtime})"})
-    int insert(Daily record);
+    @Insert({"INSERT INTO dailyorder (ordernum,latintude,longtitude,username,startlocation,endlocation,tel,servicetime,endtime,pid) VALUES (#{ordernum},#{latintude},#{longtitude},#{username},#{startlocation},#{endlocation},#{tel},#{servicetime},#{endtime},#{pid})"})
+    int insert(Daily var1);
 
-    int insertSelective(Daily record);
+    int insertSelective(Daily var1);
 
-    Daily selectByPrimaryKey(Integer id);
+    @Select({"select * FROM dailyorder WHERE id=#{id}"})
+    Daily selectByPrimaryKey(Integer var1);
 
-    int updateByPrimaryKeySelective(Daily record);
+    int updateByPrimaryKeySelective(Daily var1);
 
-    int updateByPrimaryKey(Daily record);
+    int updateByPrimaryKey(Daily var1);
 
     @Select({"select * from dailyorder"})
     List<Daily> getList();
 
-    @Select({"select * from dailyorder where id =#{id}"})
-    Daily getExpressByUid(int id);
+    @Select("select * from dailyorder where id = #{id}")
+    Daily getExpressById(int var1);
 
     @Delete({"truncate table dailyorder;"})
     void deletAll();

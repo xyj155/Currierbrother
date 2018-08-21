@@ -13,13 +13,40 @@ public class Daily {
     private Date date;
     private double latintude;
     private double longtitude;
+
+    @Override
+    public String toString() {
+        return "Daily{" +
+                "id=" + id +
+                ", ordernum='" + ordernum + '\'' +
+                ", date=" + date +
+                ", latintude=" + latintude +
+                ", longtitude=" + longtitude +
+                ", username='" + username + '\'' +
+                ", servicetime=" + servicetime +
+                ", endtime=" + endtime +
+                ", startlocation='" + startlocation + '\'' +
+                ", endlocation='" + endlocation + '\'' +
+                ", tel='" + tel + '\'' +
+                ", pid=" + pid +
+                '}';
+    }
+
     private String username;
     private Integer servicetime;
     private Integer endtime;
     private String startlocation;
-    private String endlocaton;
+    private String endlocation;
     private String tel;
-    private Integer uid;
+    private String pid;
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
 
     public Daily() {
     }
@@ -30,14 +57,6 @@ public class Daily {
 
     public void setTel(String tel) {
         this.tel = tel;
-    }
-
-    public Integer getUid() {
-        return this.uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
     }
 
     public Integer getId() {
@@ -112,11 +131,11 @@ public class Daily {
         this.startlocation = startlocation == null ? null : startlocation.trim();
     }
 
-    public String getEndlocaton() {
-        return this.endlocaton;
+    public String getEndlocation() {
+        return this.endlocation;
     }
 
-    public void setEndlocaton(String endlocaton) {
-        this.endlocaton = endlocaton == null ? null : endlocaton.trim();
+    public void setEndlocation(String endlocation) {
+        this.endlocation = endlocation == null ? null : endlocation.trim();
     }
 }

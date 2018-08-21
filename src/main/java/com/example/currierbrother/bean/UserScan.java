@@ -102,4 +102,20 @@ public class UserScan {
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
     }
+
+    @Override
+    public String toString() {
+        return "UserScan{" +
+                "id=" + id +
+                ", startlocation='" + startlocation + '\'' +
+                ", ordernum='" + ordernum + '\'' +
+                ", username='" + username + '\'' +
+                ", usertel='" + usertel + '\'' +
+                ", idcard='" + idcard + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", endlocation='" + endlocation + '\'' +
+                ", createtime=" + createtime +
+                '}';
+    }
 }

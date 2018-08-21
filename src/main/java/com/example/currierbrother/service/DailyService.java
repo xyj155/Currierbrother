@@ -12,7 +12,9 @@ public interface DailyService {
     int insertDaily(Daily daily);
 
 
-    @Delete("truncate table dailyorder;")
+
     void deletAll();
 
+
+    Daily getDailyOrderById(int id);
 }

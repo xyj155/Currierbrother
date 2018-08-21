@@ -51,20 +51,24 @@ public class SolutionController {
             String packages = solution.getPackages();
             String replace = packages.replace("[", " ").replace("]", "");
             String[] split = replace.split(",");
-            List<Daily> list = new ArrayList();
-
-            for(int i = 0; i < split.length; ++i) {
-                list.add(this.orderService.getExpressByUid(Integer.valueOf(split[i].trim())));
+            List<Daily> list = new ArrayList<>();
+            for (String aSplit : split) {
+                if (!(orderService.getExpressByUid(Integer.valueOf(aSplit.trim()))==null)){
+                    list.add(orderService.getExpressByUid(Integer.valueOf(aSplit.trim())));
+                }
             }
             if (list.size()>0){
                 map.put("code", 200);
                 map.put("success", true);
                 map.put("msg", "获取数据成功！");
                 map.put("data", list);
+            }else {
+                map.put("code", 201);
+                map.put("success", false);
+                map.put("msg", "获取数据失败！");
+                map.put("data", list);
             }
         }
-
-
         return map;
     }
 

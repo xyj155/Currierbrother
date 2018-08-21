@@ -36,4 +36,9 @@ public class UserScanServiceImpl implements UserScanService {
         return mapper.updateByPrimaryKeySelective(userScan);
     }
 
+    @Override
+    public UserScan selectByPrimaryKey(int i) {
+        return mapper.selectByPrimaryKey(i);
+    }
+
 }

@@ -17,6 +17,7 @@ public interface UserScanMapper {
 
     int insertSelective(UserScan record);
 
+    @Select("select *  FROM userscan WHERE id= #{id}")
     UserScan selectByPrimaryKey(Integer id);
 
     @Update("UPDATE userscan SET ordernum = #{ordernum} ," +
